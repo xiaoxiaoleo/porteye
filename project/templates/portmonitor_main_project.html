@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+{% include 'header.html' %}
+  
+  <body class="">
+
+    {% include 'left.html' %}
+
+ 
+
+
+
+			<div class="main-content">
+
+
+				<div class="page-content">
+ 
+<div class="row" >
+                
+
+                  
+
+
+	{% for obj in obj_list %}
+
+
+				<div class="col-lg-3" >
+				<div class="panel panel-default"  id="maintask{{  obj.id }}">
+					<div class="panel-heading">项目详情 {{  obj.id }}</div>
+					<div class="panel-body">
+						<div class="alert alert-success" role="alert">
+							<span class="glyphicon glyphicon-th-list"></span>
+							IP段:
+							 {{ obj.ip_range }} 
+						</div>
+						<div class="alert alert-info" role="alert">
+							<span class="glyphicon glyphicon-flash"></span>
+							备注:
+							 {{ obj.remarks }} 
+						</div>
+						<div class="alert alert-info" role="alert">
+							<span class="glyphicon glyphicon-flash"></span>
+							创建时间:
+							 {{ obj.create_time }} 
+						</div>
+ 
+
+					</div>
+				</div>
+			</div>
+		
+	{% endfor %}
+</div>
+
+ 
+ 
+	</div>
+
+
+	<script src="/static/js/fna/jquery.min.js"></script>
+	<script>
+	{% for obj in obj_list %}
+	  $('#maintask{{  obj.id }}').on( "click", function() {
+		    window.location = "/portmonitor/openport?project_id={{  obj.id }}";;
+		});
+	{% endfor %}
+	</script>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="/static/js/fna/bootstrap.min.js"></script>
+	<script src="/static/js/fna/Chart.min.js"></script>
+ 
+
+ 
+  
+</body>
+</html>

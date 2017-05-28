@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+      Kscan
+    </title>
+ 
+          <link rel="stylesheet" href="/static/css/vendor.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="/static/css/corp.css">
+     <link rel="stylesheet" href="/static/css/font-awesome.css">
+      <script type="text/javascript" src="/static/js/jquery.js"></script>
+      <script src="/static/js/vendor.js"></script>
+      <script src="/static/js/corp.taskconfig.add.js"></script>
+  </head>
+
+
+<link rel="stylesheet" href="/static/css/login.css">
+<body>
+<form id="slick-login" action="{% url 'django.contrib.auth.views.login' %}" method="post">
+    <img id="logo" src="/static/images/logo.png">
+    {% csrf_token %}
+    <input type="text" name="username" id="name" class="placeholder" placeholder="USERNAME">
+    <input type="password" name="password" id="pass" class="placeholder" placeholder="PASSWORD">
+    <input type="submit" id="submit" value="Login In">
+</form>
+</body>
+</html>

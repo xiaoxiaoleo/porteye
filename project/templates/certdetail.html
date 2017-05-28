@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  
+{% include 'header.html' %}
+  
+  <body class="">
+
+    {% include 'left.html' %}
+
+ 
+
+			<div class="main-content">
+
+
+				<div class="page-content">
+
+
+					<div class="row">
+
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<div class="alert alert-info">
+								<i class="icon-hand-right"></i> 证书详情
+							</div>
+							<div class="form-horizontal" id="policy-form"
+								style="display: block;">
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span> 名称：
+									</label>
+									<div class="col-sm-7">
+										<input type="text" id="common_name"  readonly="true" 
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span> 签发名称：
+									</label>
+									<div class="col-sm-7">
+										<input type="text" id="issuer_name"  readonly="true" 
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required"
+											>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span> 签发机构：
+									</label>
+									<div class="col-sm-7">
+										<span class="block input-icon input-icon-right"> <input  readonly="true" 
+											id="issuer_orgname" 
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required"
+											>
+										</span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span>信任状态:
+									</label>
+									<div class="col-sm-7">  
+										<input readonly="true" type="text" id="trusted"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span>SHA1指纹:
+									</label>
+									<div class="col-sm-7">  
+										<input readonly="true" type="text" id="sha1_fingerprint"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span> 序列号:
+									</label>
+									<div class="col-sm-7"> 
+											<input readonly="true" type="text" id="serial_number"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+
+
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span>签名算法:
+									</label>
+									<div class="col-sm-7">  
+										<input readonly="true" type="text" id="signature_algorithm"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span>公钥算法:
+									</label>
+									<div class="col-sm-7">  
+										<input readonly="true" type="text" id="publicKeyAlgorithm"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span>公钥大小:
+									</label>
+									<div class="col-sm-7">  
+										<input readonly="true" type="text" id="publicKeySize"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span>证书链:
+									</label>
+									<div class="col-sm-7">  
+										<input readonly="true" type="text" id="chain_order_valid"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span>OCSP:
+									</label>
+									<div class="col-sm-7">  
+										<input readonly="true" type="text" id="ocsp_trusted"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span>签发时间:
+									</label>
+									<div class="col-sm-7">  
+										<input readonly="true" type="text" id="notBefore"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label"> <span
+										class="require_text">*</span>过期时间:
+									</label>
+									<div class="col-sm-7">  
+										<input readonly="true" type="text" id="notAfter"
+											class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required">
+									</div>
+								</div>
+								 
+ 
+								<div class="hr hr16 hr-dotted"></div>
+							
+					
+
+							</div>
+
+							<!-- PAGE CONTENT ENDS -->
+						</div>
+						<!-- /.col -->
+
+					</div>
+					<!-- /row -->
+
+					<!-- PAGE CONTENT ENDS -->
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /.page-content -->
+	</div>
+	<!-- /.main-content -->
+
+
+	</div>
+	<!-- /.main-container-inner -->
+
+	<a href="#" id="btn-scroll-up"
+		class="btn-scroll-up btn btn-sm btn-inverse"> <i
+		class="icon-double-angle-up icon-only bigger-110"></i>
+	</a>
+	</div>
+	<!-- /.main-container -->
+
+	<!-- basic scripts -->
+	<!--[if !IE]> -->
+
+	<script
+		src="/static/js/google/jquery.min.js"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script src="/static/js/google/jquery.min.1.10.2.js"></script>
+<![endif]-->
+
+	<!--[if !IE]> -->
+
+	<script type="text/javascript">
+		window.jQuery
+				|| document
+						.write("<script src='/static/js/jquery-2.0.3.min.js'>"
+								+ "<"+"/script>");
+	</script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='/static/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+	<script type="text/javascript">
+		if ("ontouchend" in document)
+			document
+					.write("<script src='/static/js/jquery.mobile.custom.min.js'>"
+							+ "<"+"/script>");
+	</script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/typeahead-bs2.min.js"></script>
+
+	<!-- page specific plugin scripts -->
+
+	<script src="/static/js/date-time/bootstrap-datepicker.min.js"></script>
+	<script src="/static/js/jqGrid/jquery.jqGrid.min.js"></script>
+	<script src="/static/js/jqGrid/i18n/grid.locale-en.js"></script>
+
+	<!-- ace scripts -->
+
+	<script src="/static/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="/static/js/jquery.slimscroll.min.js"></script>
+	<script src="/static/js/jquery.easy-pie-chart.min.js"></script>
+	<script src="/static/js/jquery.sparkline.min.js"></script>
+	<script src="/static/js/flot/jquery.flot.min.js"></script>
+	<script src="/static/js/flot/jquery.flot.pie.min.js"></script>
+	<script src="/static/js/flot/jquery.flot.resize.min.js"></script>
+	<script src="/static/js/jquery.dataTables.min.js"></script>
+	<!-- ace scripts -->
+	<script src="/static/js/bootbox.min.js"></script>
+	<script src="/static/js/ace-elements.min.js"></script>
+	<script src="/static/js/ace.min.js"></script>
+
+	<!-- inline scripts related to this page -->
+	<script src="/static/js/highcharts.js"></script>
+	<script type="text/javascript">
+	function getprojects()
+	{
+		jQuery
+		.getJSON(
+				'/project/getcert?id={{id}}',
+				function(result) {  
+					$('#sha1_fingerprint').val(result['data']['sha1_fingerprint']);
+					$('#common_name').val(result['data']['common_name']);
+					$('#issuer_name').val(result['data']['issuer_name']);
+					$('#issuer_orgname').val(result['data']['issuer_orgname']);
+					$('#serial_number').val(result['data']['serial_number']);
+					$('#signature_algorithm').val(result['data']['signature_algorithm']);
+					$('#publicKeyAlgorithm').val(result['data']['publicKeyAlgorithm']);
+					$('#publicKeySize').val(result['data']['publicKeySize']);
+					$('#chain_order_valid').val(result['data']['chain_order_valid']);
+					$('#ocsp_trusted').val(result['data']['ocsp_trusted']);
+					$('#notBefore').val(result['data']['notBefore']);
+					$('#notAfter').val(result['data']['notAfter']);
+					$('#trusted').val(result['data']['trusted']);
+					
+					
+				});
+
+	};
+	getprojects();
+	</script>
+ 
+</body>
+</html>
+

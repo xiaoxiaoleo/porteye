@@ -1,0 +1,91 @@
+{% load myxfilter %}
+<!DOCTYPE html>
+<html lang="en">
+  
+{% include 'header.html' %}
+  
+  <body class="">
+
+    {% include 'left.html' %}
+
+ 
+
+
+
+			<div class="main-content">
+
+
+				<div class="page-content">
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">服务统计</div>
+					<div class="panel-body">
+						<div class="alert alert-success" role="alert">
+							<span class="glyphicon glyphicon-th-list"></span>
+							探测到服务器数：
+							<span id="total-server" class="badge">{{ server_count }}</span>
+						</div>
+						<div class="alert alert-info" role="alert">
+							<span class="glyphicon glyphicon-flash"></span>
+							开放端口总数：
+							<span id="total-port" class="badge">{{ port_count}}</span>
+						</div>
+ 
+					</div>
+				</div>
+			</div>
+		</div>
+ 
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">开放端口</div>
+					<div class="panel-body">
+						<table id="ports-table" class="table table-hover">
+							<thead>
+								<tr>
+								<th>IP</th>
+									<th>端口</th>
+									<th>系统</th>
+								</tr>
+							</thead>
+							<tbody>
+
+							{% for k,v in obj_all.items %}
+			                <tr>
+			                   
+			                    <td><a href="/portmonitor/ipdetail?ip_addr={{ k }}">{{ k }}</a>  </td>
+
+			                  	<td> 
+			                  	{% for i  in v %}
+
+			                   	<span data-toggle="tooltip" title="" class="label label-success port">{{ i }}</span>
+			                   	{% endfor %}
+			                   	</td>
+
+			                   	<td> {{ os_alldic|get_item:k }} </td>
+			                   
+			                </tr>
+			                {% endfor %}
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="/static/js/fna/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="/static/js/fna/bootstrap.min.js"></script>
+	<script src="/static/js/fna/Chart.min.js"></script>
+ 
+
+ 
+  
+</body>
+</html>

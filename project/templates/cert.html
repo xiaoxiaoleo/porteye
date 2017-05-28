@@ -1,0 +1,197 @@
+﻿ <!DOCTYPE html>
+<html lang="en">
+  
+{% include 'header.html' %}
+  
+  <body class="">
+
+    {% include 'left.html' %}
+
+
+				<div class="main-content">
+			 
+
+					<div class="page-content">
+					 
+
+						<div class="row">
+						
+					<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<div class="alert alert-info">
+									<i class="icon-hand-right"></i>
+									证书列表
+									<button class="close" data-dismiss="alert">
+										<i class="icon-remove"></i>
+									</button>
+								</div>
+ 
+                        <td align="center">
+						<table id="project-table" 
+							class="table table-bordered table-condensed table-hover">
+						</table>
+					</td>
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+								
+						 </div><!-- /row -->
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+				 
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+	<!--[if !IE]> -->
+
+		<script src="/static/js/google/jquery.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="/static/js/google/jquery.min.1.10.2.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='/static/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='/static/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='/static/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/js/typeahead-bs2.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<script src="/static/js/date-time/bootstrap-datepicker.min.js"></script>
+		<script src="/static/js/jqGrid/jquery.jqGrid.min.js"></script>
+		<script src="/static/js/jqGrid/i18n/grid.locale-en.js"></script>
+
+		<!-- ace scripts -->
+
+	<script src="/static/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="/static/js/jquery.slimscroll.min.js"></script>
+	<script src="/static/js/jquery.easy-pie-chart.min.js"></script>
+	<script src="/static/js/jquery.sparkline.min.js"></script>
+	<script src="/static/js/flot/jquery.flot.min.js"></script>
+	<script src="/static/js/flot/jquery.flot.pie.min.js"></script>
+	<script src="/static/js/flot/jquery.flot.resize.min.js"></script>
+   <script src="/static/js/jquery.dataTables.min.js"></script>
+	<!-- ace scripts -->
+
+	<script src="/static/js/ace-elements.min.js"></script>
+	<script src="/static/js/ace.min.js"></script>
+
+	<!-- inline scripts related to this page -->
+	<script src="/static/js/highcharts.js"></script> 
+	<script type="text/javascript">  
+	 
+	function getprojects()
+	{
+		jQuery
+		.getJSON(
+				'/project/getcerts',
+				function(result) {
+					table = $("#project-table")
+							.dataTable(
+									{
+										"bLengthChange" : true,
+										"bInfo" : true,
+										"aaSorting" : [ [
+												3,
+												"desc" ] ],
+										"aoColumnDefs" : [ {
+											"bVisible" : false,
+											"aTargets" : [ 9 ]
+										} ],
+										"lengthMenu" : [
+												20,
+												50,
+												100 ],
+										"iDisplayLength" : 20,
+										"bPaginate" : true, //翻页功能
+										"bFilter" : true,
+										"bAutoWidth" : true,
+										"bSort" : true,
+										'aaData' : result['data'],
+										//"bRetrieve": true,
+										"bDestroy" : true,
+										// "oSearch":{ "sSearch": "", "bRegex": false, "bSmart": true },
+										"oLanguage" : {
+											"sInfo" : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+											"oPaginate" : {
+												"sFirst" : "首页",
+												"sPrevious" : "前一页",
+												"sNext" : "后一页",
+												"sLast" : "尾页"
+											},
+											"sProcessing" : "<img src='/static/img/loading35.gif' />"
+										},
+										"aoColumns" : [
+												{"sTitle" : "主题","mData" : "common_name"}, 
+												{"sTitle" : "颁发组织","mData" : "issuer_orgname"},
+												{"sTitle" : "签名算法","mData" : "signature_algorithm" },
+												{"sTitle" : "公钥算法","mData" : "publicKeyAlgorithm" },
+												{"sTitle" : "公钥大小","mData" : "publicKeySize" }, 
+												{"sTitle" : "颁发时间","mData" : "notBefore" },
+												{"sTitle" : "到期时间","mData" : "notAfter" },
+												{"sTitle" : "剩余有效期","mData" : "expdate" ,"mRender" : function(data,type,row) {
+													if(data>60)
+												    {
+													    return '<span class="label label-success  arrowed-in-right arrowed">'+data+'</span>';
+												    }
+													if(data>30)
+													{
+														 return '<span class="label label-warning  arrowed-in-right arrowed">'+data+'</span>'; 
+													} 
+													
+													return '<span class="label label-danger  arrowed-in-right arrowed">'+data+'</span>'; 
+													 
+												}
+											    },
+												{"sTitle" : "","mData" : "id","mRender" : function(data,type,row) {
+														
+														return "<a class=\"btn btn-xs btn-success\" href=\"/project/certdetail?id="+data+"\"><i class=\"icon-lemon\"></i>查看</a>";
+													}
+												},
+												{"sTitle" : "","mData" : "id"},
+											  ]
+									});
+
+				});
+
+	};
+ 
+ 
+	getprojects();  
+	
+ 
+		
+		</script>
+	 
+</body>
+</html>
+

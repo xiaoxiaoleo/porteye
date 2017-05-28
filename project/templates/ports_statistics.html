@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+{% include 'header.html' %}
+  
+  <body class="">
+
+    {% include 'left.html' %}
+
+ 
+
+
+
+			<div class="main-content">
+
+
+				<div class="page-content">
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">服务统计</div>
+					<div class="panel-body">
+						<div class="alert alert-success" role="alert">
+							<span class="glyphicon glyphicon-th-list"></span>
+							探测到服务器数：
+							<span id="total-server" class="badge"></span>
+						</div>
+						<div class="alert alert-info" role="alert">
+							<span class="glyphicon glyphicon-flash"></span>
+							开放端口总数：
+							<span id="total-port" class="badge"></span>
+						</div>
+						<div>
+							<canvas id="statChart" width="1287" height="600" style="width: 1287px; height: 600px;" id="statChart"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">探测到的页面标题</div>
+					<div class="panel-body">
+						<table id="title-table" class="table table-hover">
+							<thead>
+								<tr>
+									<th>地址</th>
+									<th>标题</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">开放端口</div>
+					<div class="panel-body">
+						<table id="ports-table" class="table table-hover">
+							<thead>
+								<tr>
+									<th>IP</th>
+									<th>端口</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="infoModal" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+					<h4 class="modal-title">详细信息</h4>
+				</div>
+				<div class="modal-body">
+					<pre id="response"></pre>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="/static/js/fna/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="/static/js/fna/bootstrap.min.js"></script>
+	<script src="/static/js/fna/Chart.min.js"></script>
+	<script type="text/javascript">
+
+	var servers    = {};
+	var portdata   = {};
+	var statistics = {};
+	function getprojects()
+	{
+ 		$.ajax({ 
+ 			url: "/project/getportmonitorreport?id={{id}}&ip={{ip}}", 
+ 			context: document.body, 
+ 			dataType: "json",
+ 			async:false,
+ 			success: function(result) { 
+					servers  = result['portinfo_dict'];
+					portdata =  result['data'] ;
+					statistics =result['statistics'];
+				}
+
+			});
+
+ 
+	};
+	getprojects();
+	 /*
+
+		*/
+		$(function() {
+			String.prototype.format = function() {
+			    var s = this,i = arguments.length;
+			    while (i--) {
+			        s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
+			    }
+			    return s;
+			};
+			
+			var ctx = document.getElementById("statChart").getContext("2d");
+
+			var data = {};
+
+			data.labels = Object.keys(statistics);
+			data.datasets = [ {
+				label : "数量",
+				fillColor : "rgba(101,154,201,1)",
+				strokeColor : "rgba(84, 140, 188,1)",
+				highlightFill : "rgba(121, 189, 206,1)",
+				highlightStroke : "rgba(105, 180, 198,1)",
+				data : Object.keys(statistics).map(function(k) {
+					return statistics[k];
+				})
+			} ];
+			var statChart = new Chart(ctx).Bar(data);
+			$('#statChart').click(function(evt) {
+				var activeBars = statChart.getBarsAtEvent(evt);
+				$("#ports-table tr").removeClass();
+				var type = activeBars[0].label;
+				if (type) {
+					$('#ports-table span[data-original-title*="' + type + '"]').closest('tr').addClass('warning');
+				}
+			});
+			
+function decode(s) {
+    return unescape(s.replace(/\\(u[0-9a-fA-F]{4})/gm, '%$1'));
+}
+			var totalServer = 0, totalPort = 0, titles = [], tregex = /(\d+) web (.+)$/;
+			$.each(servers, function(ip, ports) {
+				totalServer++;
+				totalPort += ports.length;
+				var opened = ports.map(function(p) {
+					var arr = tregex.exec(p);
+					if (arr != null && arr.length > 2) {
+						titles.push({
+							ip:ip,
+							port:arr[1],
+							//title:arr[2]
+							title:decode(arr[2]),
+						});
+					}
+					return '<span data-toggle="tooltip" title="{0}" class="label label-success port">{1}</span>'.format(p,p.split(' ')[0])
+				}).join(' ');
+
+				$('#ports-table tbody').append('<tr><td><a href="/project/report?ip={0}" target="_blank"> {0}</a></td><td>{1}</td></tr>'.format(ip,opened));
+			});
+			$('#total-server').html(totalServer);
+			$('#total-port').html(totalPort);
+			
+			$.each(titles, function(index, t) {
+				$('#title-table tbody').append('<tr><td><a href="http://{0}"  target="_blank">{0}</a></td><td>{1}</td></tr>'.format(t.ip+':'+t.port,t.title));
+			});
+
+			$('[data-toggle="tooltip"]').tooltip();
+
+			$('.port').click(function() {
+				var key = $(this).parent().prev().html() + ":" + $(this).html();
+				if (portdata.hasOwnProperty(key)) {
+					$('#response').html(decodeURIComponent(portdata[key]));
+					$('#infoModal').modal('show');
+				}
+			});
+		});
+	</script>
+</body>
+</html>

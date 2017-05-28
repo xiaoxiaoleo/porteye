@@ -1,0 +1,165 @@
+{% load myxfilter %}
+<!DOCTYPE html>
+<html lang="en">
+  
+{% include 'header.html' %}
+  
+  <body class="">
+
+    {% include 'left.html' %}
+
+ 
+<script>function decode(s) {
+    return unescape(s.replace(/\\(u[0-9a-fA-F]{4})/gm, '%$1'));
+}{{ j.web_title  }}
+</script>
+
+
+			<div class="main-content">
+
+
+				<div class="page-content">
+<!--    <a href="#"><strong>/</strong></a> <a href="/portmonitor/main_project"><strong>所有项目</strong></a> 
+      <a href="#"><strong>/</strong></a> <a href="/portmonitor/alivehost?ip_addr={{ ip_addr }}"><strong>{{ ip_addr }}</strong></a> 
+ -->
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>{{ ip_addr }}</strong> 
+					</div>
+					<div class="panel-body">
+						<div class="alert alert-info" role="alert">
+							 
+							<strong>开放端口总数</strong>：{{ port_count}}<br>
+							<strong>操作系统</strong>:  {{ os_info}} <br>
+							<strong>所有者</strong>: {{ ipremark.own   }} <br>
+							<strong>用途</strong>: {{ ipremark.business }}   <br>
+							
+							<strong>备注</strong>:  {{  ipremark.remakrs }}<br>
+
+						</div>
+ 
+					</div>
+				</div>
+			</div>
+		</div>
+ 
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">开放端口(Nmap)</div>
+					<div class="panel-body">
+						<table id="ports-table" class="table table-hover">
+							<thead>
+								<tr>
+									<th>更新时间</th>
+									<th>IP</th>
+									<th>端口</th>
+									<th>协议</th>
+									<th>产品</th>
+									<th>产品相关信息</th>
+									<th>其他</th>
+								</tr>
+							</thead>
+							<tbody>
+
+
+ 							{% for i  in obj_all %}
+			                <tr>
+			                	 <td>[nmap]{{ i.inserted }}</td>					 
+			                    <td>{{ ip_addr }}</td>
+			                  	<td> 
+			                   	<span data-toggle="tooltip" title="" class="label label-success port">{{ i.port }}</span>
+			                   	</td>  
+			                    <td>{{ i.protocol }}</td>
+			                    <td>{{ i.product }} | {{ i.product_version }}  </td>
+			                    <td>{{ i.product_extrainfo }}</td>
+			                    <td>{{ i.script_results }}</td>
+			                </tr>
+			 				{% endfor %}
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	<div class="modal fade" id="infoModal" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+					<h4 class="modal-title">详细信息</h4>
+				</div>
+				<div class="modal-body">
+					<pre id="response"></pre>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">开放端口(FNASCAN)</div>
+					<div class="panel-body">
+						<table id="fna-table" class="table table-hover">
+							<thead>
+								<tr>
+									<th>更新时间</th>
+									<th>IP</th>
+									<th>端口</th>
+									<th>协议</th>
+									<th>产品</th>
+									<th>产品相关信息</th>
+									<th>其他</th>
+								</tr>
+							</thead>
+							<tbody>
+
+
+ 							{% for j  in fnascan_objs %}
+			                <tr>
+			                	 <td>[fnascan]{{ j.update_time }}</td>					 
+			                    <td>{{ ip_addr }}</td>
+			                  	<td> 
+			                   	<span data-toggle="tooltip" title="" class="label label-success port">{{ j.port }}</span>
+			                   	</td>  
+			                    <td>{{ j.service_name }}</td>
+			                    <td> 
+			                    <a href="http://{{ ip_addr }}:{{ j.port }}">
+					 <script> document.write('{{ j.web_title  }}')</script>   				</a> 
+					 			</td>
+			                    <td>{{ j.port_status }}</td>
+
+			                    <td>{{ j.service_detail|cut_string }} </td>
+			                </tr>
+			 				{% endfor %}
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+				 
+	</div>
+  
+    <script>$('#infoModal').modal('show');</script>
+   	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="/static/js/fna/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="/static/js/fna/bootstrap.min.js"></script>
+	<script src="/static/js/fna/Chart.min.js"></script>
+ 
+
+ 
+  
+</body>
+</html>

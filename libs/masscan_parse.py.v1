@@ -1,0 +1,48 @@
+#Author:Ciaran Strutt
+#Date:09/02/2015
+#Description:Reads masscan .xml file and outputs the host, port and banner. I wrote
+#this at 5am so it was just a quick script to make masscans output easier to look at
+
+from lxml import etree as elementTree
+
+fileName = ""
+
+#fileName = raw_input("Enter filename: ")
+
+
+def  m_parse(fileName):
+	try:
+		treeData = elementTree.parse(fileName)
+	except Exception,e:
+		print e 
+		return {}
+
+
+	root = treeData.getroot();
+
+	open_list =  []
+
+	_tmp_dic =  {}
+	for singleElement in root.iter("address","service","port","state"):
+	        if singleElement.get("addr") !=  None:
+	                _tmp_dic["addr"] = singleElement.get("addr")
+	                print "IP: %s" % singleElement.get("addr")
+	        if singleElement.get("portid") != None:
+	                _tmp_dic["portid"] = singleElement.get("portid")
+	                print "Port: %s" % singleElement.get("portid")
+	        if singleElement.get("state") != None:
+	                _tmp_dic["state"] = singleElement.get("state")
+	                print "State: %s" % singleElement.get("state")
+	        if singleElement.get("banner") !=  None:
+	                _tmp_dic["banner"] = singleElement.get("banner")
+
+	                print "Banner: %s" % singleElement.get("banner")
+
+	       
+
+	return  _tmp_dic
+
+
+if __name__ == '__main__':
+    fileName = raw_input("Enter filename: ")
+    print m_parse(fileName)

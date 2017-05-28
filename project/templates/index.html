@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  
+{% include 'header.html' %}
+  
+  <body class="">
+
+    {% include 'left.html' %}
+
+ 
+
+
+
+
+             <script>window.location = "/portmonitor/main_project";
+</script>
+				<div class="main-content">
+			 
+
+					<div class="page-content">
+					 
+
+						<div class="row">
+						
+					<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<div class="alert alert-info">
+									<i class="icon-hand-right"></i>
+									 监控项目
+									<button class="close" data-dismiss="alert">
+										<i class="icon-remove"></i>
+									</button>
+								</div> 
+								<div class="widget-main">
+									 <a class="btn   btn-success" href="/project/create">
+									 <i class="icon-edit bigger-130"> 添加SSL监控项目</i>
+										
+									</a>   
+									<a class="btn   btn-success" href="/project/create_portmonitor">
+									 <i class="icon-edit bigger-130"> 添加PORT监控项目</i>
+										
+									</a> 
+								</div>
+ 
+                        <td align="center">
+						<table id="project-table" 
+							class="table table-bordered table-condensed table-hover">
+						</table>
+					</td>
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+								
+						 </div><!-- /row -->
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+				 
+		</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+	<!--[if !IE]> -->
+
+		<script src="/static/js/google/jquery.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="/static/js/google/jquery.min.1.10.2.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='/static/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='/static/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='/static/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/js/typeahead-bs2.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<script src="/static/js/date-time/bootstrap-datepicker.min.js"></script>
+		<script src="/static/js/jqGrid/jquery.jqGrid.min.js"></script>
+		<script src="/static/js/jqGrid/i18n/grid.locale-en.js"></script>
+
+		<!-- ace scripts -->
+
+	<script src="/static/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="/static/js/jquery.slimscroll.min.js"></script>
+	<script src="/static/js/jquery.easy-pie-chart.min.js"></script>
+	<script src="/static/js/jquery.sparkline.min.js"></script>
+	<script src="/static/js/flot/jquery.flot.min.js"></script>
+	<script src="/static/js/flot/jquery.flot.pie.min.js"></script>
+	<script src="/static/js/flot/jquery.flot.resize.min.js"></script>
+   <script src="/static/js/jquery.dataTables.min.js"></script>
+	<!-- ace scripts -->
+
+	<script src="/static/js/ace-elements.min.js"></script>
+	<script src="/static/js/ace.min.js"></script>
+
+	<script src="/static/js/bootbox.min.js"></script>
+	<!-- inline scripts related to this page -->
+	<script src="/static/js/highcharts.js"></script> 
+	<script type="text/javascript">  
+	function alert_msg(msg) { 
+		  bootbox.alert({  
+	            buttons: {  
+	               ok: {  
+	                    label: '返回',  
+	                    className: 'btn-myStyle'  
+	                }  
+	            },  
+	            message: msg,  
+	            callback: function() {  
+	            	location.reload();
+	            },   
+	        });  
+	};
+	function projectdel(id){
+		bootbox.dialog({
+			message: "<h3 class=\"   smaller lighter orange\" >确认删除监控项目?</h3>",
+			buttons: 			
+			{
+				
+				"button" :
+				{
+					"label" : "确定",
+					"className" : "btn-sm",
+					"callback": function() {
+						jQuery
+						.getJSON(
+								'/project/delproject?id='+id,
+								function(result) {
+									if(result["result"])
+									{
+										alert_msg("成功");
+										 
+									}else
+									{
+										alert_msg("失败");
+									}
+								});
+
+					}
+				},
+				"click" :
+				{
+					"label" : "取消",
+					"className" : "btn-sm btn-danger"
+				}
+			}
+		});
+		
+	};
+	
+	function getprojects(check_type)
+	{
+		jQuery
+		.getJSON(
+				'/project/getproject?check_type='+ check_type,
+				function(result) {
+					table = $("#project-table")
+							.dataTable(
+									{
+										"bLengthChange" : true,
+										"bInfo" : true,
+										"aaSorting" : [ [
+												3,
+												"desc" ] ],
+										"aoColumnDefs" : [ {
+											"bVisible" : false,
+											"aTargets" : [ 9]
+										} ],
+										"lengthMenu" : [
+												20,
+												50,
+												100 ],
+										"iDisplayLength" : 20,
+										"bPaginate" : true, //翻页功能
+										"bFilter" : true,
+										"bAutoWidth" : false,
+										"bSort" : true,
+										'aaData' : result['data'],
+										//"bRetrieve": true,
+										"bDestroy" : true,
+										// "oSearch":{ "sSearch": "", "bRegex": false, "bSmart": true },
+										"oLanguage" : {
+											"sInfo" : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+											"oPaginate" : {
+												"sFirst" : "首页",
+												"sPrevious" : "前一页",
+												"sNext" : "后一页",
+												"sLast" : "尾页"
+											},
+											"sProcessing" : "<img src='/static/img/loading35.gif' />"
+										},
+										"aoColumns" : [
+												{"sTitle" : "项目名称","mData" : "name"}, 
+												{"sTitle" : "域名","mData" : "domain"},
+												{"sTitle" : "端口","mData" : "port" },
+												{"sTitle" : "检测间隔","mData" : "check_frequency" ,"mRender" : function(data,type,row) {
+													
+													 return data+'分钟';
+												}
+													
+													
+												},
+												{"sTitle" : "通知规则","mData" : "notify_rule_name" },
+												{"sTitle" : "状态","mData" : "status","mRender" : function(data,type,row) {
+													 var res=['任务加载中','检测中','正常','警告','发生错误','过期']
+													  return res[data];
+												}
+													
+                                                 },
+												{"sTitle" : "状态信息","mData" : "statusinfo" },
+											//	{"sTitle" : "ccs检测","mData" : "ccs_check" },
+											//	{"sTitle" : "hsts检测","mData" : "hsts_check" },
+											//	{"sTitle" : "heartbleed检测","mData" : "heartbleed_check" },
+												{"sTitle" : "最近检测时间","mData" : "lastcheck_time"},
+												{"sTitle" : "","mData" : "id","mRender" : function(data,type,row) {
+													
+													res= "<a class=\"btn btn-xs btn-success\" href=\"/project/report?id="+data+"\"><i class=\"icon-lemon\"></i>查看</a>";
+												    res+="<button class=\"btn btn-xs btn-delete\" onclick=\"projectdel('"+data+"')\"><i class=\"icon-trash\"></i>删除</button>";
+												    return res;
+												}
+											},
+												{"sTitle" : "","mData" : "id"},
+											  ]
+									});
+
+				});
+
+	};
+ 
+ 	
+ 	if (window.location.pathname == "/sslcheck/" )
+	  {
+	 	getprojects("sslcheck");  
+	  }
+	
+	else
+	{
+
+		getprojects("portcheck");  
+	}
+ 
+		
+		</script>
+ 
+</body>
+</html>
+

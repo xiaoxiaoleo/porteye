@@ -1,0 +1,6 @@
+appdirs==1.4.3
+Django==1.8.7
+MySQL-python==1.2.5
+packaging==16.8
+pyparsing==2.2.0
+six==1.10.0

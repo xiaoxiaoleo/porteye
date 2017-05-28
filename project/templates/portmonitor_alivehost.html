@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+{% include 'header.html' %}
+  
+  <body class="">
+
+    {% include 'left.html' %}
+
+ 
+
+
+
+			<div class="main-content">
+
+
+				<div class="page-content">
+   <a href="#"><strong>/</strong></a> <a href="/portmonitor/main_project"><strong>所有项目</strong></a> 
+ 
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">服务统计</div>
+					<div class="panel-body">
+						<div class="alert alert-success" role="alert">
+							<span class="glyphicon glyphicon-th-list"></span>
+							存活的IP数：
+							<span id="total-server" class="badge">{{ ip_count }}</span>
+						</div>
+ 
+ 
+					</div>
+				</div>
+			</div>
+		</div>
+ 
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">开放端口</div>
+					<div class="panel-body">
+						<table id="ports-table" class="table table-hover">
+							<thead>
+								<tr>
+									<th>IP</th>
+ 
+								</tr>
+							</thead>
+							<tbody>
+
+							{% for x in  ip_list %}
+			                <tr>
+			                    <td><a href="/portmonitor/singleopenport?ip_addr={{ x }}">{{ x }}</a> </td>
+			                </tr>
+			                {% endfor %}
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="/static/js/fna/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="/static/js/fna/bootstrap.min.js"></script>
+	<script src="/static/js/fna/Chart.min.js"></script>
+ 
+
+ 
+  
+</body>
+</html>
