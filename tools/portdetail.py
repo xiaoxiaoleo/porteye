@@ -1,35 +1,13 @@
 # encoding:utf-8
 # copy by evileo
 
-
-import urllib2
-import urllib
 import sys
-import argparse
-import django
-import logging
-import requests
-import json 
 import os
-import time
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','porteye.settings')
- 
-import django
-django.setup()
-from portmonitor.models import checktask 
-from hconfig import cpath,xpython,master_server,masscan_dir,wyportmap_dir
-from checkmail import check_sendmail 
-from subprocess import Popen
-import xmltodict
-from portmonitor.models import OpenPort,ResultPorts
-import  datetime,time
-from libs.mylogger import mylogger
-logger = mylogger('check masscan.py')
-from libs.utils import postHttp,list_str2int,list_int2str
 from hconfig import cpath,xpython,master_server,masscan_dir
- 
-
-
+from subprocess import Popen
+from libs.utils import postHttp,list_str2int,list_int2str
+from common.tools import logger
+from common.db import db 
 
 def run_fnascan(project_id,ip_addr,_open_port):
     #####run fnascan 
@@ -37,7 +15,7 @@ def run_fnascan(project_id,ip_addr,_open_port):
     need_scan_port = ','.join(list_int2str(_open_port))
     jsonfilename = ip_addr + '.html'
     os.chdir(cpath + 'fnascan/')
-    cmd = xpython + ' ' + cpath + 'fnascan/fnascan.py  -h ' + ip_addr  + ' -p ' +need_scan_port
+    cmd = xpython + ' ' + cpath + 'tools/fnascan/fnascan.py  -h ' + ip_addr  + ' -p ' +need_scan_port
     logger.info(cmd)  
     os.system(cmd)
     try:
@@ -68,12 +46,13 @@ def run_wyportmap(project_id,ip_addr,port_list):
     need_scan_port = ','.join(default_need_scan)
     logger.info("PORT WILL WYPORTMAP SCAN : "+need_scan_port)
     try:
-        cmd =  "sudo " +  xpython + ' ' +'   '+ wyportmap_dir+'  ' + ip_addr + '  ' +need_scan_port + '  ' +  str(project_id) 
+        cmd =  "sudo " +  xpython + ' ' +'   '+ 'tools/wyportmap/wyportmap.py'+'  ' + ip_addr + '  ' +need_scan_port + '  ' +  str(project_id) 
         logger.info(cmd)
         proc = Popen(cmd.split(),shell=False,cwd=cpath).wait()
     except Exception,e:
         logger.error(e)
         pass
+
 
 
 def scan_single_ip(ip_addr,project_id = 0):
@@ -96,27 +75,21 @@ def scan_single_ip(ip_addr,project_id = 0):
     logger.info(data)
     serverurl = 'http://'+master_server+'/portmonitor/uploadopenport'
     postHttp(serverurl ,data)
-    
+        
 
     run_fnascan(project_id = project_id,ip_addr = ip_addr,_open_port = _open_port)
 
-
-def main():
+def scan_db_ip():
     #while True:
     allip =OpenPort.objects.values_list('ip',flat=True).order_by('last_checkdetail_time').distinct()
     task_length = len(allip)
-    #['21', '22', '23', '24', '25', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '110', '143', '443', '513', '873', '1080', '1433', '1521', '1158', '3306', '3307', '3308', '3389', '3690', '5900', '6379', '7001', '8000-8090', '9000', '9418', '27017', '27018', '27019', '50060', '111', '11211', '2049', '53', '139', '389', '445', '465', '993', '995', '1723', '4440', '5432', '5800', '8000', '8001', '8080', '8081', '8888', '9200', '9300', '9080', '9999']
-    logger.info('checkdetail.py')
     for i in range(0,task_length):
         ip_addr = allip[i]
-
         scan_single_ip(ip_addr = ip_addr)
 
-
-
-def usage():
+def usage():    
     print """
-    checkdetall.py ip_addr    project_id 
+    portdetail.py ip_addr    project_id 
     """      
 
 def test_uploadopenport():

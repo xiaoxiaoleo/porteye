@@ -1,19 +1,13 @@
 # encoding:utf-8
 # code by evileo
-import django
-from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
-from django.shortcuts import render, render_to_response
-from django.contrib.auth.decorators import login_required,user_passes_test,permission_required
+from django.http import HttpResponse
+from django.shortcuts import render_to_response
+from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt 
 import json,os,datetime,time
-from django.utils.timezone import now
 from project.models import  alertlog
 import urllib
-#from project.models import FnascanResult,FnascanMetadata 
-import datetime 
-###web page start
 from libs.mylogger import mylogger
 logger = mylogger('project.views.py')
 

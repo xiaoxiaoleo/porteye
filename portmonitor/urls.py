@@ -14,5 +14,6 @@ urlpatterns = patterns('',
      url(r'^alivehost$', views.alivehost),  
      url(r'^singleopenport$', views.singleopenport),  
      url(r'^ipdetail$', views.ipdetail),  
+
 #     url(r'^modify$', views.modify),   
 )

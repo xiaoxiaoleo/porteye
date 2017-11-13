@@ -1,49 +1,15 @@
 # encoding:utf-8
 # code by evileo
 
-'''
-Created on 2016 
-
-@author: evileo
-'''
-import urllib2
-import urllib
 import sys
-import argparse
-import django
-import logging
-import requests
-import json 
-import os
-import time
-import sys
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','porteye.settings')
- 
-import django
-django.setup()
-from portmonitor.models import checktask 
-# from setting.models import server_setting
-
-
+from subprocess import Popen
+import xmltodict
+import datetime,time
+from libs.utils import postHttp,sort_masscan
+from common.db import db 
 from hconfig import cpath,xpython,master_server,masscan_dir
 
-#from libs.simple_shedule import run as s_run() #run(interval, command)
-
-from subprocess import Popen
-
-import xmltodict
-
-
-
-import  datetime,time
-
-from libs.mylogger import mylogger
-logger = mylogger('check masscan.py')
-
-
-from libs.utils import postHttp,sort_masscan
 def main(ip_addr,project_id):
-    logger.info('checkmasscantasking')
     try:
         cmd =  "sudo " + masscan_dir +"bin/masscan --ports 1-65535  " + ip_addr +" --max-rate 3000  --source-port 60000 -oX /tmp/scanoutput.xml" 
         logger.info(cmd)

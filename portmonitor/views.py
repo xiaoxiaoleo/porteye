@@ -8,7 +8,6 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt 
 import json
 # from setting.models import server_setting
-
  
 from  portmonitor.models import  port_alive_project,OpenPort,port_monitor,FnascanResult,ResultPorts,ResultIp,IpRemarks
 from libs.mylogger import mylogger
@@ -46,6 +45,7 @@ def get_os(ip_addr):
     except:
         ip_os = 'unknow'
     return ip_os
+
 def get_fnascan_lastchecktime(ip_addr):
     try:
         ip_os = ResultIp.objects.values_list('os',flat=True).filter(address= ip_addr).order_by('-inserted')[0]
@@ -63,7 +63,6 @@ def get_masscan_lastchecktime(ip_addr):
 
 @login_required(login_url="/login/")
 def openport(request):
-
     project_id = request.GET.get('project_id', '')
     #_ip_list =  project.objects.values_list('domain',flat=True).filter(ports_check=1)
     #for _ip in _ip_list:
@@ -100,8 +99,6 @@ def openport(request):
             'os_alldic':os_alldic
             })
         )
-     
-
 
 def singleopenport(request):
     ip_addr = request.GET.get('ip_addr', '')

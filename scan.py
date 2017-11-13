@@ -1,42 +1,15 @@
 #!/usr/bin/env python
 # encoding:utf-8
 
-'''
-Created on 2016 
-
-@author: evileo
-'''
-import urllib2
-import urllib
 import sys
-import argparse
-import django
-import logging
-import requests
-import json 
-import os
 import time
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','porteye.settings')
- 
-import django
-django.setup()
- 
-from portmonitor.models import port_monitor
-
-from hconfig import cpath,xpython 
-
-#from libs.simple_shedule import run as s_run() #run(interval, command)
-
- 
-
-from libs.mylogger import mylogger
-logger = mylogger('checktask.py')
-
-
 from subprocess import Popen
-def main():
- 
+from common.config import cpath,xpython
+from common.tool import logger
+
+def scan_db_ip():
     while(1):
+
         time.sleep(1)
 
         alltask =port_monitor.objects.all().order_by('id')
@@ -47,18 +20,17 @@ def main():
 
             cmd =  xpython + ' ' + 'checkdetail.py'
             logger.info(cmd)   
-            proc = Popen(cmd.split(),shell=False,cwd=cpath).wait()
-
+            Popen(cmd.split(),shell=False,cwd=cpath).wait()
 
             cmd= cpath+'masscan.py '
             cmd =  xpython + ' ' + cmd  + '  '+  curobj.ip_range +'  ' +  str(curobj.id)
             logger.info(cmd)   
-            proc = Popen(cmd.split(),shell=False,cwd=cpath).wait()
+            Popen(cmd.split(),shell=False,cwd=cpath).wait()
 
 
-def single_mode(ip_addr,project_id):
+def scan_sigle_ip(ip_addr,project_id):
 
-    cmd =  xpython + ' ' + 'checkdetail.py'  + "  " + ip_addr+ "  " +project_id
+    cmd =  xpython + ' ' + 'tools/portdetail.py'  + "  " + ip_addr+ "  " +project_id
     logger.info(cmd)   
     proc = Popen(cmd.split(),shell=False,cwd=cpath) 
 
@@ -72,17 +44,15 @@ def single_mode(ip_addr,project_id):
 def usage():
     print """
     checktask.py ip_addr    project_id 
-    """      
- 
+    """
 
 if __name__ == '__main__':
     if len(sys.argv) ==  3:
         ip_addr = sys.argv[1]
         project_id =  sys.argv[2]
-        single_mode(ip_addr,project_id )
-
+        scan_sigle_ip(ip_addr,project_id )
     elif len(sys.argv) ==  1:
-        main()
+        scan_db_ip()
     else:
         usage()
         
