@@ -3,6 +3,14 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils.timezone import now
 # Create your models here.
+
+class checktask (models.Model):
+    project_id = models.IntegerField()
+    domain = models.CharField(max_length=100) 
+    module= models.CharField(max_length=100) 
+    frequency = models.IntegerField()
+    lastcheck = models.IntegerField(default=0)
+
 class port_alive_project(models.Model):
     user_id = models.IntegerField()
     name = models.CharField(max_length=80)

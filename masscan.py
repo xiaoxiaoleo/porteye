@@ -17,11 +17,11 @@ import json
 import os
 import time
 import sys
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','sslcloud.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','porteye.settings')
  
 import django
 django.setup()
-from sslcheck.models import checktask 
+from portmonitor.models import checktask 
 # from setting.models import server_setting
 
 
@@ -81,7 +81,7 @@ def main(ip_addr,project_id):
 
 
 def test():
-    #cmd = "sudo /home/leo/Desktop/sslcloud/masscan/bin/masscan --ports 1-65535  172.32.1.147 --max-rate 3000  --source-port 60000 -oX /tmp/scanoutput.xml"
+    #cmd = "sudo /home/leo/Desktop/porteye/masscan/bin/masscan --ports 1-65535  172.32.1.147 --max-rate 3000  --source-port 60000 -oX /tmp/scanoutput.xml"
     # cmd ='whoami'
     # #logger.info(cmd)
     # print cmd

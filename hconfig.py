@@ -1,4 +1,4 @@
-cpath = '/home/leo/Desktop/sslcloud/'
+cpath = '/home/leo/Desktop/porteye/'
 master_ip = '127.0.0.1'
 
 xpython='/home/leo/Desktop/envxlcscan/bin/python'

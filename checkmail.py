@@ -1,7 +1,7 @@
 # encoding:utf-8
 
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','sslcloud.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','porteye.settings')
 import django
 django.setup()
 

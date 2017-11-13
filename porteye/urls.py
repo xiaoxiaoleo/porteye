@@ -1,4 +1,4 @@
-"""sslcloud URL Configuration
+"""porteye URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
@@ -25,9 +25,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$',include('project.urls')),
     url(r'^project/',include('project.urls')),
-    # url(r'^setting/',include('setting.urls')),
-    url(r'^sslcheck/',include('sslcheck.urls')),
-
     url(r'^portmonitor/',include('portmonitor.urls')),
         url(r'^login/$',
          login_views.login ,

@@ -12,11 +12,11 @@ import requests
 import json 
 import os
 import time
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','sslcloud.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','porteye.settings')
  
 import django
 django.setup()
-from sslcheck.models import checktask 
+from portmonitor.models import checktask 
 from hconfig import cpath,xpython,master_server,masscan_dir,wyportmap_dir
 from checkmail import check_sendmail 
 from subprocess import Popen
@@ -120,7 +120,7 @@ def usage():
     """      
 
 def test_uploadopenport():
-    #cmd = "sudo /home/leo/Desktop/sslcloud/masscan/bin/masscan --ports 1-65535  172.32.1.147 --max-rate 3000  --source-port 60000 -oX /tmp/scanoutput.xml"
+    #cmd = "sudo /home/leo/Desktop/porteye/masscan/bin/masscan --ports 1-65535  172.32.1.147 --max-rate 3000  --source-port 60000 -oX /tmp/scanoutput.xml"
     # cmd ='whoami'
     # #logger.info(cmd)
     # print cmd
