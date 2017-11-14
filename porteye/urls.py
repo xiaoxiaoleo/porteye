@@ -14,19 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
-from django.contrib import admin
-from project.forms import BootstrapAuthenticationForm
+from web.forms import BootstrapAuthenticationForm
 from django.contrib import admin
 from django.contrib.auth import views as login_views
- 
 from datetime import datetime
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$',include('project.urls')),
-    url(r'^project/',include('project.urls')),
-    url(r'^portmonitor/',include('portmonitor.urls')),
-        url(r'^login/$',
+    url(r'^$',include('web.urls')),
+    url(r'^login/$',
          login_views.login ,
         {
             'template_name': 'auth/login.html',
