@@ -22,7 +22,7 @@ mysql_config = {
     'db': 'porteye'
 }
 
-masscan_dir = cpath + "tools/masscan/"
+masscan_dir = '/usr/local/Cellar/masscan/1.0.4/bin'
 
 distribute_server_list = ['127.0.0.1:8000',]
 

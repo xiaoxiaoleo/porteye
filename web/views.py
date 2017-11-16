@@ -10,7 +10,7 @@ import json
 import datetime
 from  web.models import  port_alive_project,OpenPort,port_monitor,FnascanResult,ResultPorts,ResultIp,IpRemarks
 from common.tool import  logger
-
+from django.views.decorators.csrf import csrf_exempt
 
 
 @login_required(login_url="/login/")
@@ -23,7 +23,7 @@ def getproject(request):
     res = []
     data = port_alive_project.objects.filter(ports_check =1)
     for i in data:
-        # _t = checktask.objects.filter(project_id=i.id) 
+        # _t = checktask.objects.filter(project_id=i.id)
         lastcheck_time = ''
         lastcheck_time = time.strftime('%Y.%m.%d %H:%M:%S',time.localtime(float(lastcheck_time)))
         res.append({'id':i.id,'name':i.name,'domain':i.domain,'port':i.port,'check_frequency':i.check_frequency,
@@ -31,9 +31,9 @@ def getproject(request):
                     'lastcheck_time':lastcheck_time,
                     'heartbleed_check':i.heartbleed_check,'ccs_check':i.ccs_check,
                      'hsts_check':i.hsts_check, 'status':i.status,'statusinfo':i.statusinfo,'notify_rule_name':'mail'
-                    }) 
- 
-    return HttpResponse(json.dumps({'result':True,'data':res})) 
+                    })
+
+    return HttpResponse(json.dumps({'result':True,'data':res}))
 
 def get_os(ip_addr):
     try:
@@ -60,8 +60,6 @@ def get_masscan_lastchecktime(ip_addr):
 @login_required(login_url="/login/")
 def openport(request):
     project_id = request.GET.get('project_id', '')
-    #_ip_list =  project.objects.values_list('domain',flat=True).filter(ports_check=1)
-    #for _ip in _ip_list:
     if project_id:
         ip_list =  OpenPort.objects.values_list('ip',flat=True).filter(port_status=1,project_id = project_id).distinct().order_by('ip')
         #print ip_list
@@ -165,7 +163,8 @@ def ipdetail(request):
  
 
 @login_required(login_url="/login/")
-def main_project(request):
+def all_project(request):
+
     obj_list = port_monitor.objects.all().order_by('id')
  
     return render(
@@ -198,10 +197,6 @@ def alivehost(request):
             'ip_count':len(ip_list),
             })
         )
-    
-
- 
-
 
     else:
         error_message = ''
@@ -214,146 +209,6 @@ def alivehost(request):
             })
         )
 
-
-
-@csrf_exempt
-def uploadopenport(request):
-    rawjson = json.loads(json.dumps(request.POST))
-    projectid = int(rawjson['project_id'])
-    new_port_list =  rawjson['data'].split('-')
-    ip = str(rawjson['domain'])  
-    
-
-    old_port_list = OpenPort.objects.values_list('port',flat=True).filter(ip=ip,port_status=1)
-    logger.info('RECEIVED IP: '  + str(ip) )
-    logger.info('old_port_list'  + str(old_port_list) )
-    logger.info('new_port_list'  + str(new_port_list) )
-
-    #new port!
-    True_open_port_list = set(new_port_list) - set(old_port_list) 
-    True_close_port_list = set(old_port_list) - set(new_port_list) 
-
-    for i in list(True_open_port_list):
-        _tmp_query =  OpenPort.objects.filter(ip=ip ,port = i)
-        if len(_tmp_query) < 1:
-            _tmp_obj = OpenPort(project_id=projectid,ip=ip ,port = i,insert_time =  datetime.datetime.now(),findby = 'masscan',update_time  =  datetime.datetime.now())
-            _tmp_obj.save()
-        if len(_tmp_query) == 1:
-            _tmp_obj = OpenPort.objects.get(ip=ip ,port = i)
-            _tmp_obj.update_time  =  datetime.datetime.now()
-            _tmp_obj.port_status = 1
-            _tmp_obj.save()
- 
-    for i in list(True_close_port_list):
-        _tmp_obj = OpenPort.objects.get(ip=ip ,port = i)
-        _tmp_obj.update_time  =  datetime.datetime.now()
-        _tmp_obj.port_status = 0
-        _tmp_obj.save()
-
-    OpenPort.objects.filter(ip=ip).update(last_checkdetail_time =   datetime.datetime.now())
-
-    return HttpResponse(json.dumps({'result':True,'info':''})) 
-
-@csrf_exempt
-def uploadfnascanresult(request):
-    rawjson = json.loads(json.dumps(request.POST))
-    projectid = int(rawjson['project_id'])
-    #print 10000*'a'
-    #print rawjson['data']
-    if  rawjson['data']  == '{}':
-        return HttpResponse(json.dumps({'result':False,'data':'i receive noting!'}))
-
-    data=rawjson['data'].split('\n____\n')
-    # if len(data) >2:
-    #     insert_fnascametadata(projectid,data[0],data[1],data[2])
-
-
-    port_service_list =  eval(data[0])
-    port_service_list =  port_service_list[0]['submenu'][0]['submenu']
-    service_detail_list = eval(data[1])
- 
-
-    port_list =[]
-    i_ip = ''
-    for  i in port_service_list:
-        print i
-        i_ip,i_port = i['url'].split(':')
-        logger.info(i_ip)
-        port_list.append(i_port)
-        i_service = i['name'] 
-        i_title = ''
-        i_service_detail = ''
-        #print i['url']
-        try:
-            i_service_detail = service_detail_list[i['url'].strip()]
-        except Exception,e:
-            logger.error(e)
-            pass
-        if len(i_service.split('web ||') )== 2:
-
-            i_title = i_service.split('web ||')[1]
-            i_service = i_service.split('web ||')[0]+'web'
-
-        insert_fnascanresult(i_ip,i_port,i_service,projectid,i_service_detail,i_title)
-
-    update_fnascan_port_status(i_ip,port_list)
-
-
-    return HttpResponse(json.dumps({'result':True,'info':''})) 
-
- 
-def update_fnascan_port_status(ip,new_port_list):
-    old_port_list = FnascanResult.objects.values_list('port',flat=True).filter(ip=ip,port_status=1)
-    logger.info('RECEIVED IP: '  + str(ip) )
-    logger.info('old_port_list'  + str(old_port_list) )
-    logger.info('new_port_list'  + str(new_port_list) )
-
-    #new port!
-    True_open_port_list = set(new_port_list) - set(old_port_list) 
-    True_close_port_list = set(old_port_list) - set(new_port_list) 
-
-    for i in list(True_open_port_list):
-        _tmp_query =  FnascanResult.objects.filter(ip=ip ,port = i)
- 
-        if len(_tmp_query) == 1:
-            _tmp_obj = OpenPort.objects.get(ip=ip ,port = i)
-            _tmp_obj.update_time  =  datetime.datetime.now()
-            _tmp_obj.port_status = 1
-            _tmp_obj.save()
- 
-    for i in list(True_close_port_list):
-        _tmp_obj = FnascanResult.objects.get(ip=ip ,port = i)
-        _tmp_obj.update_time  =  datetime.datetime.now()
-        _tmp_obj.port_status = 0
-        _tmp_obj.save()
-
-#new port find!
-def insert_fnascanresult(i_ip,i_port,i_service,projectid,i_service_detail,i_title):
-    try:
-        i_service =  i_service.split(" ")[1].replace("(default)","")
-    except Exception,e:
-        logger.error(e)
-        pass
-    #current_time = int(time.time())
-    # old list 
-    _tmp_list = FnascanResult.objects.filter(project_id = projectid,ip = i_ip,port = i_port)
-    #if new port !
-    if len(_tmp_list) == 0:
-        _fnascan_result = FnascanResult(project_id = projectid, ip = i_ip,port = i_port, service_name = i_service, service_detail=i_service_detail,web_title = i_title)
-        _fnascan_result.insert_time =  datetime.datetime.now()
-
-        _fnascan_result.last_check_time = datetime.datetime.now()
-        _fnascan_result.save()
-         
-    # if not new port   !   
-    elif  len(_tmp_list) == 1:
-        _fnascan_result = FnascanResult.objects.get(project_id = projectid, ip = i_ip,port = i_port)
-        _fnascan_result.service_name = i_service
-        _fnascan_result.i_service_detail = i_service_detail
-        _fnascan_result.i_title  = i_title
-
-        _fnascan_result.last_check_time = datetime.datetime.now()
-        _fnascan_result.save()
 
  
 

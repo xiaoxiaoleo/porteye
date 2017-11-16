@@ -32,11 +32,11 @@
 									</button>
 								</div> 
 								<div class="widget-main">
-{#									 <a class="btn   btn-success" href="/project/create">#}
-{#									 <i class="icon-edit bigger-130"> 添加SSL监控项目</i>#}
-{#										#}
-{#									</a>   #}
-									<a class="btn   btn-success" href="/project/create">
+									 <a class="btn   btn-success" href="/web/add_task">
+									 <i class="icon-edit bigger-130"> 添加域名监控项目</i>
+
+									</a>
+									<a class="btn   btn-success" href="/web/create">
 									 <i class="icon-edit bigger-130"> 添加PORT监控项目</i>
 										
 									</a> 
@@ -179,7 +179,7 @@
 	{
 		jQuery
 		.getJSON(
-				'/portmonitor/getproject',
+				'/web/getproject',
 				function(result) {
 					table = $("#project-table")
 							.dataTable(

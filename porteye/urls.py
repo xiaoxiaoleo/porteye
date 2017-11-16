@@ -18,10 +18,12 @@ from web.forms import BootstrapAuthenticationForm
 from django.contrib import admin
 from django.contrib.auth import views as login_views
 from datetime import datetime
+from django.http import HttpResponseRedirect
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$',include('web.urls')),
+    url(r'^$', lambda x: HttpResponseRedirect('/web/')),
+    url(r'^web/', include('web.urls')),
     url(r'^login/$',
          login_views.login ,
         {

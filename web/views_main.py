@@ -9,7 +9,7 @@ import json,os,datetime,time
 from web.models import  alertlog, project
 import urllib
 from common.tool import logger
-from hconfig import cpath,xpython,distribute_server_list
+from common.config import cpath,xpython,distribute_server_list
 
 @login_required(login_url="/login/")
 def index(request):
@@ -22,12 +22,18 @@ def certdetail(request):
     return render_to_response('certdetail.html' ,{'id':request.GET['id']},context_instance=RequestContext(request))
 
 @login_required(login_url="/login/")
+@csrf_exempt
 def create(request):
     return render_to_response('create.html' ,{},context_instance=RequestContext(request))
 
 @login_required(login_url="/login/")
 def create_portmonitor(request):
     return render_to_response('portmonitor_create.html', {}, context_instance=RequestContext(request))
+
+@login_required(login_url="/login/")
+def create_portmonitor(request):
+    return render_to_response('portmonitor_create.html', {}, context_instance=RequestContext(request))
+
 
 @login_required(login_url="/login/")
 def report(request):
@@ -60,15 +66,15 @@ def createproject(request):
         data = json.loads(request.body)
         extchk =  data['extern_check'].split(';')
         chk={'ccs':False,'hsts':False,'heartbleed':False,'poodle':False,'ports_check':False}
- 
-        for i in extchk: 
+
+        for i in extchk:
             if len(i)>1:
                 if not chk.has_key(i):
-                    return HttpResponse(json.dumps({'result':False,'info':'extern_check data invalid'})) 
-                
+                    return HttpResponse(json.dumps({'result':False,'info':'extern_check data invalid'}))
+
                 chk[i] = True
         #TODO check args
-        
+
         domains = data['domain'].split(';')
         name = data['name']
         frequency = data['frequency']

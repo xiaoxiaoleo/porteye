@@ -4,8 +4,9 @@ from django.utils.timezone import now
 
 class checktask (models.Model):
     project_id = models.IntegerField()
-    domain = models.CharField(max_length=100) 
-    module= models.CharField(max_length=100) 
+    domain = models.CharField(max_length=100)
+    ip_range = models.CharField(max_length=100)
+    module= models.CharField(max_length=100)
     frequency = models.IntegerField()
     lastcheck = models.IntegerField(default=0)
 
@@ -19,7 +20,7 @@ class port_alive_project(models.Model):
     create_time = models.CharField(max_length=30)
     status = models.IntegerField() # 0=wait for upload  1=wait for checking 2=normal 3=warning 4=error 5=expired
     statusinfo = models.CharField(max_length=512,blank=True)
-    ports_check = models.BooleanField(default=False) 
+    ports_check = models.BooleanField(default=False)
     main_id = models.IntegerField(default=0)
 
 class port_monitor(models.Model):
@@ -32,8 +33,6 @@ class port_monitor(models.Model):
     fnascan_check = models.BooleanField(default=True) 
     masscan_check = models.BooleanField(default=True) 
     last_check_time = models.DateTimeField(default = now)
- 
-
 
 
 class FnascanResult(models.Model):
