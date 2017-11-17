@@ -10,7 +10,7 @@ class checktask (models.Model):
     frequency = models.IntegerField()
     lastcheck = models.IntegerField(default=0)
 
-class port_alive_project(models.Model):
+class PortAliveProject(models.Model):
     user_id = models.IntegerField()
     name = models.CharField(max_length=80)
     port = models.IntegerField()
@@ -23,14 +23,14 @@ class port_alive_project(models.Model):
     ports_check = models.BooleanField(default=False)
     main_id = models.IntegerField(default=0)
 
-class port_monitor(models.Model):
+class HostProject(models.Model):
 	#id is main id
     name = models.CharField(max_length=80)
     ip_range = models.CharField(max_length=80)
     check_frequency = models.IntegerField(default = 0 ) # fenzhong
     create_time = models.DateTimeField(default = now)
     remarks  = models.CharField(max_length=512,blank=True)
-    fnascan_check = models.BooleanField(default=True) 
+    fnascan_check = mod els.BooleanField(default=True)
     masscan_check = models.BooleanField(default=True) 
     last_check_time = models.DateTimeField(default = now)
 

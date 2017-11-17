@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt 
 import json
 import datetime
-from  web.models import  port_alive_project,OpenPort,port_monitor,FnascanResult,ResultPorts,ResultIp,IpRemarks
+from  web.models import  PortAliveProject,OpenPort,PortAliveProject,FnascanResult,ResultPorts,ResultIp,IpRemarks
 from common.tool import  logger
 from django.views.decorators.csrf import csrf_exempt
 
@@ -21,7 +21,7 @@ def index(request):
 @login_required(login_url="/login/")
 def getproject(request):
     res = []
-    data = port_alive_project.objects.filter(ports_check =1)
+    data = PortAliveProject.objects.filter(ports_check =1)
     for i in data:
         # _t = checktask.objects.filter(project_id=i.id)
         lastcheck_time = ''
@@ -165,7 +165,7 @@ def ipdetail(request):
 @login_required(login_url="/login/")
 def all_project(request):
     
-    obj_list = port_monitor.objects.all().order_by('id')
+    obj_list = PortAliveProject.objects.all().order_by('id')
  
     return render(
         request,

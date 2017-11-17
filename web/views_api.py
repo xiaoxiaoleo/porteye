@@ -4,7 +4,7 @@
 import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
-from  web.models import  OpenPort,port_monitor,FnascanResult,ResultPorts,ResultIp,IpRemarks,AliveHost
+from  web.models import  OpenPort,PortAliveProject,FnascanResult,ResultPorts,ResultIp,IpRemarks,AliveHost
 from django.views.decorators.csrf import csrf_exempt
 from common.tool import  logger
 import datetime
@@ -13,6 +13,25 @@ def http_return(data):
     if not data['data'] :
         return HttpResponse(json.dumps({'result':True,'data':False}))
     return HttpResponse(json.dumps(data))
+
+def list_alive_host(request):
+    project_id = request.GET.get('project_id', '')
+    if project_id == 'all':
+        ip_list = list(AliveHost.objects.values_list('ip_addr',flat=True).all())
+        return http_return({'result': True, 'data': ip_list})
+    if project_id:
+        ip_list = list(AliveHost.objects.values_list('ip_addr',flat=True).filter(project_id = project_id))
+        return http_return({'result': True, 'data': ip_list})
+
+def list_ip_range(request):
+    project_id = request.GET.get('project_id', '')
+    # if project_id == 'all':
+    #     ip_list = list(AliveHost.objects.values_list('ip_addr',flat=True).all())
+    #     return http_return({'result': True, 'data': ip_list})
+    if project_id:
+        ip_list = list(AliveHost.objects.values_list('ip_addr',flat=True).filter(project_id = project_id))
+        return http_return({'result': True, 'data': ip_list})
+
 
 def list_all_ip(request):
     allip = list(OpenPort.objects.values_list('ip',flat=True).order_by('last_checkdetail_time').distinct())
@@ -24,7 +43,7 @@ def list_all_open_port(request):
     return http_return({'result':True,'data':port_list})
 
 def list_all_ip_range(request):
-    all_ip_range = port_monitor.objects.all()
+    all_ip_range = PortAliveProject.objects.all()
     return http_return({'result':True,'data':all_ip_range}) 
 
 def ip_address_to_project_id(request):

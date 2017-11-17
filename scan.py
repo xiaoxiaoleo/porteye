@@ -13,10 +13,8 @@ from tools.portdetail import  run_fnascan
 from tools.portalive import test as portalive_test
 from tools.hostalive import hostalive
 
-
-
-def host_alive():
-    hostalive(ip_addr, project_id)
+def scan_host_alive(project_id):
+    ret = getJsonHttp('http://'+master_server+'/web/list_all_open_port?ip_addr=%s' % ip_addr)
 
 def scan_db_ip_range():
     pass
@@ -27,7 +25,11 @@ def scan_db_ip():
 def scan_db_project():
     pass
 
-def scan_sigle_ip(ip_addr, project_id):
+
+"""
+ alivehost ip -> portalive -> portdetail 
+"""
+def scan_sigle_port_alive_detail(ip_addr, project_id):
     
     portalive(ip_addr, project_id)
 
@@ -36,7 +38,22 @@ def scan_sigle_ip(ip_addr, project_id):
 
     run_fnascan(project_id, ip_addr, port_list)
 
+"""
+projcet_id  ->  alivehost ip -> portalive -> portdetail 
+"""
+def scan_multi_port_alive_detail(project_id):
 
+    ret = getJsonHttp('http://'+master_server+'/web/list_alive_host?project_id=%s' % project_id)
+    ip_list = ret['data']
+
+    for ip_addr in ip_list:
+
+        portalive(ip_addr, project_id)
+
+        ret = getJsonHttp('http://'+master_server+'/web/list_all_open_port?ip_addr=%s' % ip_addr)
+        port_list = ret['data']
+
+        run_fnascan(project_id, ip_addr, port_list)
 
 def test():
     portalive_test()
@@ -65,9 +82,13 @@ if __name__ == '__main__':
         hostalive(option.ip_addr, option.project_id)
     if option.scan == 'port_alive':
         portalive(option.ip_addr, option.project_id)
-    if option.scan == 'port_alive_detail':
-        scan_sigle_ip(option.ip_addr, option.project_id)
-
+    if option.scan == 'sigle_port_alive_detail':
+        scan_sigle_port_alive_detail(option.ip_addr, option.project_id)
+    if option.scan == 'multi_port_alive_detail':
+        scan_multi_port_alive_detail(option.project_id)
+    if option.scan == 'scan_all':
+        hostalive(option.ip_addr, option.project_id)
+        scan_multi_port_alive_detail(option.project_id)
     if option.test_fun == '123':
         test()
 

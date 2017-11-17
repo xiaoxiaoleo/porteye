@@ -45,7 +45,7 @@ def report(request):
 
 
     if ip:
-        data = port_alive_project.objects.filter(domain = ip)
+        data = PortAliveProject.objects.filter(domain = ip)
     if pid:
         data = ssl_project.objects.filter(user_id=userid,id=pid)
 

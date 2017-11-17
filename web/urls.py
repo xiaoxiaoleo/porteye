@@ -14,7 +14,8 @@ urlpatterns = patterns('',
      url(r'^ipdetail$', views.ipdetail),  
     
      # API
-     url(r'^list_all_ip$', views_api.list_all_ip),  
+     url(r'^list_all_ip$', views_api.list_all_ip),
+     url(r'^list_alive_host$', views_api.list_alive_host),
      url(r'^list_all_ip_range$', views_api.list_all_ip_range),
      url(r'^list_all_open_port$', views_api.list_all_open_port),
      url(r'^ip_address_to_project_id$', views_api.ip_address_to_project_id),

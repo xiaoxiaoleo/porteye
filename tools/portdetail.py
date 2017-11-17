@@ -2,6 +2,7 @@
 # copy by evileo
 
 import os
+from subprocess import Popen
 from libs.utils import postHttp, getJsonHttp, list_int2str
 from common.tool import logger
 from common.config import cpath, xpython, master_server
@@ -9,30 +10,34 @@ from common.config import cpath, xpython, master_server
 def run_fnascan(project_id, ip_addr, port_list):
     #####run fnascan
     default_need_scan = ['21', '22', '23', '24', '25', '80', '81', '82', '83', '84', '85', '86', '87', '88', '89', '110', '143', '443', '513', '873', '1080', '1433', '1521', '1158', '3306', '3307', '3308', '3389', '3690', '5900', '6379', '7001', '8000-8090', '9000', '9418', '27017', '27018', '27019', '50060', '111', '11211', '2049', '53', '139', '389', '445', '465', '993', '995', '1723', '4440', '5432', '5800', '8000', '8001', '8080', '8081', '8888', '9200', '9300', '9080', '9999']
-    for  p in port_list:
-        if p not in default_need_scan:
-            default_need_scan.append(p)
+    if isinstance(port_list, list):
+        for  p in port_list:
+            if p not in default_need_scan:
+                default_need_scan.append(p)
 
     logger.info("FNASCAN PORT : "+str(default_need_scan))
     need_scan_port = ','.join(list_int2str(default_need_scan))
     jsonfilename = ip_addr + '.html'
-    os.chdir(cpath + '/tools/fnascan/')
-    cmd = xpython + ' ' + cpath + '/tools/fnascan/fnascan.py  -h ' + ip_addr + ' -p ' + need_scan_port
-    logger.info(cmd)  
-    os.system(cmd)
+
+    fnascan_dir = cpath + '/tools/fnascan'
+
+    cmd = xpython + ' ' + fnascan_dir + '/fnascan.py  -h ' + ip_addr + ' -p ' + need_scan_port
+    logger.info(cmd)
+    Popen(cmd.split(), shell=False, cwd=fnascan_dir).wait()
 
     try:
-        result_file = open('./'+jsonfilename)
+        result_file = open('fnascan_dir/'+jsonfilename)
         postdata = result_file.read()
         data = {'domain' : ip_addr, 'project_id' : project_id, 'data' : postdata}
         result_file.close()
-        os.remove('./'+jsonfilename)
+        os.remove('fnascan_dir/'+jsonfilename)
+        serverurl = 'http://'+master_server+'/web/upload_fnascan_result'
+        logger.info(serverurl)
+        postHttp(serverurl, data)
     except Exception, e:
         logger.error(e)
 
-    serverurl = 'http://'+master_server+'/web/upload_fnascan_result'
-    logger.info(serverurl)  
-    postHttp(serverurl, data)
+
 
 
 # def run_wyportmap(project_id, ip_addr, port_list):

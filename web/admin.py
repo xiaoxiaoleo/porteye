@@ -1,4 +1,4 @@
-from web.models import IpRemarks,port_monitor
+from web.models import IpRemarks,PortAliveProject,HostProject
 from django.contrib import admin
 
 # Register your models here.
@@ -8,12 +8,12 @@ class IpRemarksAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-class port_monitorAdmin(admin.ModelAdmin):
+class HostProjectAdmin(admin.ModelAdmin):
     list_display = ['name','ip_range','remarks','fnascan_check','masscan_check']
-    search_fields =  [ 'name', 'ip_range']   
+    search_fields =  ['name', 'ip_range']   
 
 
 admin.site.register(IpRemarks, IpRemarksAdmin)
     
-admin.site.register(port_monitor,port_monitorAdmin)
+admin.site.register(HostProject, HostProjectAdmin)
     
