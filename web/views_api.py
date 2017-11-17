@@ -4,7 +4,7 @@
 import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
-from  web.models import  OpenPort,port_monitor,FnascanResult,ResultPorts,ResultIp,IpRemarks
+from  web.models import  OpenPort,port_monitor,FnascanResult,ResultPorts,ResultIp,IpRemarks,AliveHost
 from django.views.decorators.csrf import csrf_exempt
 from common.tool import  logger
 import datetime
@@ -30,7 +30,25 @@ def list_all_ip_range(request):
 def ip_address_to_project_id(request):
     ip_addr = request.GET.get('ip_addr', '')
     project_id = OpenPort.objects.values_list('project_id',flat=True).filter(ip=ip_addr).distinct()[0]
-    return http_return({'result':True,'data':project_id}) 
+    return http_return({'result':True,'data':project_id})
+
+
+@csrf_exempt
+def upload_alive_host(request):
+    if request.method == 'POST':
+        req_dic = json.loads(json.dumps(request.POST))
+        project_id = int(req_dic['project_id'])
+        new_ip_list = req_dic['data'].split('-')
+
+        #old_ip_list = AliveHost.objects.values_list('port', flat = True).filter(project_id = project_id, is_up = 1)
+        AliveHost.objects.filter(project_id = project_id).delete()
+
+        for ip in new_ip_list:
+            _tmp_obj = AliveHost(project_id = project_id, ip_addr = ip)
+            _tmp_obj.save()
+
+        return HttpResponse(json.dumps({'result': True, 'info': ''}))
+
 
 @csrf_exempt
 def upload_open_port(request):

@@ -23,6 +23,7 @@ mysql_config = {
 }
 
 masscan_dir = '/usr/local/Cellar/masscan/1.0.4/bin'
+nmap_dir = '/usr/local/bin'
 
 distribute_server_list = ['127.0.0.1:8000',]
 

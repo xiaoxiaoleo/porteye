@@ -18,7 +18,8 @@ urlpatterns = patterns('',
      url(r'^list_all_ip_range$', views_api.list_all_ip_range),
      url(r'^list_all_open_port$', views_api.list_all_open_port),
      url(r'^ip_address_to_project_id$', views_api.ip_address_to_project_id),
-     url(r'^upload_open_port$', views_api.upload_open_port), 
+     url(r'^upload_open_port$', views_api.upload_open_port),
+     url(r'^upload_alive_host$', views_api.upload_alive_host),
      url(r'^upload_fnascan_result', views_api.upload_fnascan_result),
 
 

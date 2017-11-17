@@ -62,7 +62,7 @@
 	<script>
 	{% for obj in obj_list %}
 	  $('#maintask{{  obj.id }}').on( "click", function() {
-		    window.location = "/portmonitor/openport?project_id={{  obj.id }}";;
+		    window.location = "/web/openport?project_id={{  obj.id }}";;
 		});
 	{% endfor %}
 	</script>

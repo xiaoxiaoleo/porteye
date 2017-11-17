@@ -97,7 +97,7 @@ def run_fnascan(project_id, ip_addr, port_list):
 #
 #     #port_list  = list_str2int(port_list)
 #     run_wyportmap(project_id = project_id,ip_addr = ip_addr ,port_list =  port_list)
-#     #get wyportmap open portlist,then push to /portmonitor/uploadopenport
+#     #get wyportmap open portlist,then push to /web/uploadopenport
 #
 #     # 判断是否是new port
 #     # _open_port = []

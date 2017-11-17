@@ -164,7 +164,7 @@ def ipdetail(request):
 
 @login_required(login_url="/login/")
 def all_project(request):
-
+    
     obj_list = port_monitor.objects.all().order_by('id')
  
     return render(

@@ -75,6 +75,16 @@ class OpenPort(models.Model):
     #updateby  =  models.CharField(max_length=10,default='')
     remarks = models.TextField(blank=True,default='')
 
+
+class AliveHost(models.Model):
+    """
+    save alive host results
+    """
+    project_id = models.IntegerField()
+    ip_addr = models.CharField(max_length=32, blank=True, null=True)
+    is_up = models.IntegerField(blank=True, null=True)
+    update_time = models.DateTimeField(null=True, blank=True, default = now)
+
 # class FnascanMetadata(models.Model):
 #     """
 #     save fnscan   scan results
@@ -87,7 +97,7 @@ class OpenPort(models.Model):
 #     port_data  = models.TextField(null=True, blank=True, default='') 
 #     statistics = models.TextField(null=True, blank=True, default='')
   
-# wyportmap models
+#wyportmap models
 class ResultIp(models.Model):
     taskid = models.IntegerField(blank=True, null=True)
     inserted = models.DateTimeField(blank=True, null=True)
@@ -136,7 +146,7 @@ class alertlog(models.Model):
     # timestamp =  models.IntegerField()
     insert_time = models.DateTimeField(default=now)
     # last_time = models.DateTimeField(null=True, blank=True,default = datetime.datetime.now())
-    sendmail = models.IntegerField(max_length=1, default=0)
+    sendmail = models.IntegerField(default=0)
 
 
 # Create your models here.

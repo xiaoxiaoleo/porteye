@@ -1,1 +1,6 @@
-探测网络端口和服务开放情况
+####  Detect alive host and open port .
+
+use masscan detact alive host and open port, fnascan detact port detail.
+
+
+
