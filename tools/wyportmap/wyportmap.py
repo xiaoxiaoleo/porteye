@@ -15,7 +15,7 @@ retrycnt = 3
 timeout = 3600
 
 # 数据库连接 & 全局扫描参数
-global_dbcoon = 'mysql+mysqldb://evileo:5czVbOo4DOok45SvPHg9@sniffer.huobidev.com:3306/porteye'
+global_dbcoon = 'mysql+mysqldb://xo:5czVbOo4DOok45SvPHg9@xx.com:3306/porteye'
 
 
 # global_dbcoon = 'mysql+mysqldb://用户名:密码@数据库服务器IP:数据库端口/数据库名称'
