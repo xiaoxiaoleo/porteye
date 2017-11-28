@@ -30,7 +30,7 @@ class HostProject(models.Model):
     check_frequency = models.IntegerField(default = 0 ) # fenzhong
     create_time = models.DateTimeField(default = now)
     remarks  = models.CharField(max_length=512,blank=True)
-    fnascan_check = mod els.BooleanField(default=True)
+    fnascan_check = models.BooleanField(default=True)
     masscan_check = models.BooleanField(default=True) 
     last_check_time = models.DateTimeField(default = now)
 
